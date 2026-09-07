@@ -11,11 +11,21 @@ export class Database {
         this.#database = JSON.parse(data);
       })
       .catch(() => {
-        this.#persist()
+        this.#persist();
       });
   }
 
   #persist() {
-    fs.writeFile(DATABASE_PATH, JSON.stringify(this.#database))
+    fs.writeFile(DATABASE_PATH, JSON.stringify(this.#database));
+  }
+
+  insert(table, data) {
+    if (Array.isArray(this.#database[table])) {
+      this.#database[table].push(data);
+    } else {
+      this.#database[table] = [data];
+    }
+
+    this.#persist();
   }
 }
